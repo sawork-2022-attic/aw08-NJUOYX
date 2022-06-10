@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <dependencies>
+        <dependency>
+            <groupId>com.micropos</groupId>
+            <artifactId>pos-products</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.micropos</groupId>
+            <artifactId>pos-counter</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <version>2.6.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream</artifactId>
+            <version>3.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+            <version>3.2.3</version>
+        </dependency>
+
+    </dependencies>
+    <parent>
+        <artifactId>micropos</artifactId>
+        <groupId>com.micropos</groupId>
+        <version>0.0.1</version>
+    </parent>
+    <artifactId>pos-order</artifactId>
+    <version>0.0.1</version>
+    <name>pos-order</name>
+    <description>pos-order</description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <configuration>
+                    <inputSpec>src/main/resources/api.yml</inputSpec>
+                    <generatorName>spring</generatorName>
+                    <modelNameSuffix>Dto</modelNameSuffix>
+                    <apiPackage>com.micropos.posorder.api</apiPackage>
+                    <modelPackage>com.micropos.posorder.dto</modelPackage>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

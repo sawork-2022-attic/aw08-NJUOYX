@@ -1,0 +1,55 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: User
+  license:
+    name: MIT
+paths:
+  /login/{uid}:
+    get:
+      summary: try to login
+      operationId: login
+      tags:
+        - user
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: The id of user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          description: login failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - uid
+      properties:
+        uid:
+          type: string
+        password:
+          type: string
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

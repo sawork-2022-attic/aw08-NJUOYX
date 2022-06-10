@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <dependencies>
+        <dependency>
+            <groupId>com.micropos</groupId>
+            <artifactId>pos-products</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <parent>
+        <artifactId>micropos</artifactId>
+        <groupId>com.micropos</groupId>
+        <version>0.0.1</version>
+    </parent>
+    <artifactId>pos-counter</artifactId>
+    <version>0.0.1</version>
+    <name>pos-counter</name>
+    <description>pos-counter</description>
+    <properties>
+        <java.version>11</java.version>
+        <spring-cloud.version>2021.0.3</spring-cloud.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <configuration>
+                    <inputSpec>src/main/resources/api.yml</inputSpec>
+                    <generatorName>spring</generatorName>
+                    <modelNameSuffix>Dto</modelNameSuffix>
+                    <apiPackage>com.micropos.poscounter.api</apiPackage>
+                    <modelPackage>com.micropos.poscounter.dto</modelPackage>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+
+</project>

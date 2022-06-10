@@ -1,0 +1,51 @@
+openapi: "3.0.0"
+
+info:
+  version: 1.0.0
+  title: User
+  license:
+    name: MIT
+paths:
+  /delivery/{uid}:
+    get:
+      summary: check delivery
+      operationId: checkDelivery
+      tags:
+        - check
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: The id of user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: An order list
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+
+
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

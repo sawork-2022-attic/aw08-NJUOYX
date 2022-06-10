@@ -1,0 +1,23 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: pos-order
+  cloud:
+    function:
+      definition: supplyOrder
+    stream:
+      function:
+        bindings:
+          supplyOrder-out-0: order
+      bindings:
+        order:
+          destination: output
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    instance-id: pos-order
+    prefer-ip-address: true

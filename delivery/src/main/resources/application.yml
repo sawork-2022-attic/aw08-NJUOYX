@@ -1,0 +1,17 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: delivery
+  cloud:
+    function:
+      definition: getMessage
+    stream:
+      function:
+        bindings:
+          getMessage-in-0: output
+      rabbit:
+        bindings:
+          output:
+            consumer:
+              declare-exchange: false

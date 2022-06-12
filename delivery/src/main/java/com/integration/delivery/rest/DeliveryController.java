@@ -1,8 +1,8 @@
 package com.integration.delivery.rest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.integration.delivery.service.DeliveryService;
 import com.micropos.posdelivery.api.DeliveryApi;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

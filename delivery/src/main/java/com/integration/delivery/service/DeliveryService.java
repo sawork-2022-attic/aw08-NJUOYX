@@ -1,6 +1,6 @@
 package com.integration.delivery.service;
 
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 
 public interface DeliveryService {
     JSONObject checkStatus(String uid);

@@ -1,8 +1,8 @@
 package com.integration.delivery.repository;
 
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 
 public interface DeliveryRepository {
     JSONObject query(String uid);
-    void insert(JSONObject json);
+    void insert(String jsonString);
 }

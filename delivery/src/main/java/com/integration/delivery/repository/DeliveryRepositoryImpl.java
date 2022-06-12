@@ -1,7 +1,7 @@
 package com.integration.delivery.repository;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -18,18 +18,19 @@ public class DeliveryRepositoryImpl implements DeliveryRepository{
     }
 
     @Override
-    public void insert(JSONObject json) {
-        if(json.isNull("user")||json.isNull("cart")){
+    public void insert(String jsonString) {
+        JSONObject json = JSONObject.parseObject(jsonString);
+        if(json.get("user")==null||json.get("cart")==null){
+            System.err.println("Illegal message");
             return;
         }
-        String uid = json.getString("user");
+        String uid = json.getJSONObject("user").getString("uid");
         JSONArray cart = json.getJSONArray("cart");
         JSONObject get = repository.get(uid);
         if(get == null){
             repository.put(uid, json);
         }else{
-            get.getJSONArray("cart").put(cart.toList());
+            get.getJSONArray("cart").addAll(cart);
         }
-
     }
 }

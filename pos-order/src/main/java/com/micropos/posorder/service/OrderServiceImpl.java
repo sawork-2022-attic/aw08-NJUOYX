@@ -25,6 +25,10 @@ public class OrderServiceImpl implements OrderService{
 
     @Bean
     public Supplier<OrderDto> supplyOrder(){
-        return orderQueue::poll;
+        return () -> {
+            OrderDto message = orderQueue.poll();
+            System.out.println(System.nanoTime() + ": supplier: " + ((message == null)?"null":message.getUser().getUid()));
+            return message;
+        };
     }
 }

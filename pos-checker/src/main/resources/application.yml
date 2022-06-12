@@ -1,15 +1,13 @@
 server:
-  port: 8082
-
+  port: 8086
 spring:
   application:
-    name: pos-cart
-
+    name: pos-checker
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:7001/eureka
   instance:
-    instance-id: pos-cart
+    instance-id: pos-checker
     prefer-ip-address: true

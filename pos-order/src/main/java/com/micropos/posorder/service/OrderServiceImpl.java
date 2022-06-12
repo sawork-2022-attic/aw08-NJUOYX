@@ -1,6 +1,9 @@
 package com.micropos.posorder.service;
 
+import com.micropos.posorder.dto.OrderDto;
+import com.micropos.posorder.mapper.OrderMapper;
 import com.micropos.posorder.model.Order;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
@@ -11,15 +14,17 @@ import java.util.function.Supplier;
 @Service
 public class OrderServiceImpl implements OrderService{
 
-    private final Queue<Order> orderQueue = new LinkedList<>();
+    private final Queue<OrderDto> orderQueue = new LinkedList<>();
+    @Autowired
+    private OrderMapper orderMapper;
 
     @Override
     public Boolean sendOrder(Order order) {
-        return orderQueue.add(order);
+        return orderQueue.add(orderMapper.toOrderDto(order));
     }
 
     @Bean
-    public Supplier<Order> supplyOrder(){
+    public Supplier<OrderDto> supplyOrder(){
         return orderQueue::poll;
     }
 }

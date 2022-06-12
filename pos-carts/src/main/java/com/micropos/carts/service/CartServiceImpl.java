@@ -19,13 +19,11 @@ public class CartServiceImpl implements CartService{
 
     private final CartRepository cartRepository;
     private final ItemMapper itemMapper;
-    private CircuitBreakerFactory circuitBreakerFactory;
 
     public CartServiceImpl(@Autowired CartRepository cartRepository,
-                           @Autowired ItemMapper itemMapper,@Autowired CircuitBreakerFactory circuitBreakerFactory){
+                           @Autowired ItemMapper itemMapper){
         this.cartRepository = cartRepository;
         this.itemMapper = itemMapper;
-        this.circuitBreakerFactory = circuitBreakerFactory;
     }
 
     @LoadBalanced
@@ -40,13 +38,10 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public Boolean addItem(String productId) {
-        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("getProductBreaker");
         String url = "http://localhost:6001/api/products/" + productId;
-        return circuitBreaker.run(()->{
-            ProductDto productDto = restTemplate().getForObject(url, ProductDto.class);
-            Product product = itemMapper.toProduct(productDto);
-            return this.cartRepository.addItem(new Item(product, 1));
-        },throwable -> false);
+        ProductDto productDto = restTemplate().getForObject(url, ProductDto.class);
+        Product product = itemMapper.toProduct(productDto);
+        return this.cartRepository.addItem(new Item(product, 1));
     }
 
     @Override

@@ -29,7 +29,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /cart/{uid}/{productId}:
+  /cart/add/{uid}/{productId}:
     get:
       summary: add an item to Cart
       operationId: addItemToCart
@@ -61,7 +61,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /cart/{uid}/total:
+  /cart/total/{uid}:
     get:
       summary: get total count of cart
       operationId: getTotal
@@ -87,8 +87,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /cart/{uid}/checkout:
-    post:
+  /cart/checkout/{uid}:
+    get:
       summary: checkout the cart
       operationId: checkout
       tags:

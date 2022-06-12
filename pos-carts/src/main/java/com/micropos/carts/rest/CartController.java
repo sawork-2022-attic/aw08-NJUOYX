@@ -7,14 +7,16 @@ import com.micropos.carts.model.Item;
 import com.micropos.carts.service.CartService;
 import com.micropos.poscounter.dto.UserDto;
 import com.micropos.poscounter.mapper.UserMapper;
+import com.micropos.poscounter.mapper.UserMapperImpl;
 import com.micropos.poscounter.model.User;
+import com.micropos.posorder.mapper.OrderMapper;
+import com.micropos.posorder.mapper.OrderMapperImpl;
 import com.micropos.posorder.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -25,25 +27,24 @@ import java.util.List;
 @RestController
 @RequestMapping("api")
 public class CartController implements CartApi {
-    private final ItemMapper itemMapper;
-    private final CartService cartService;
-    private UserMapper userMapper;
     @Autowired
-    private CircuitBreakerFactory circuitBreakerFactory;
+    private final ItemMapper itemMapper;
+    @Autowired
+    private final CartService cartService;
+    private UserMapper userMapper = new UserMapperImpl();
+    private OrderMapper orderMapper = new OrderMapperImpl();
 
     @LoadBalanced
     private RestTemplate restTemplate(){return new RestTemplate();}
 
     private Boolean checkUser(String uid){
-        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("checkUser");
         String url = "http://localhost:6001/api/login/"+uid;
-        return circuitBreaker.run(()-> restTemplate().getForObject(url, UserDto.class) != null);
+        return restTemplate().getForObject(url, UserDto.class) != null;
     }
 
     private User getUser(String uid){
-        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("checkUser");
         String url = "http://localhost:6001/api/login/"+uid;
-        return circuitBreaker.run(()-> userMapper.toUser(restTemplate().getForObject(url, UserDto.class)));
+        return userMapper.toUser(restTemplate().getForObject(url, UserDto.class));
     }
 
     public CartController(ItemMapper itemMapper, CartService cartService) {
@@ -77,15 +78,17 @@ public class CartController implements CartApi {
 
     @Override
     public ResponseEntity<Boolean> checkout(String uid) {
+        System.out.println(uid);
         User user = getUser(uid);
         if(user == null){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("sendOrder");
         String url = "http://localhost:6001/api/order";
-        Boolean res = circuitBreaker.run(()->
-                restTemplate().postForObject(
-                        url, new Order<>(user, cartService.getItems()),Boolean.class));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity postRequest = new HttpEntity(orderMapper.toOrderDto(new Order<>(user, cartService.getItems())), headers);
+        Boolean res = restTemplate().postForObject(
+                        url, postRequest,Boolean.class);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

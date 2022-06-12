@@ -23,10 +23,10 @@ spring:
           uri: lb://pos-order
           predicates:
             - Path=/api/order/**
-        - id: pos-delivery
-          uri: lb://pos-delivery
+        - id: check
+          uri: lb://pos-checker
           predicates:
-            - Path=/api/delivery/**
+            - Path=/check/**
   main:
     web-application-type: reactive
 eureka:

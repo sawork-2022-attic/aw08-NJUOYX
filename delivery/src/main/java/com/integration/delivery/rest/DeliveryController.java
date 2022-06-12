@@ -22,7 +22,7 @@ public class DeliveryController implements DeliveryApi {
         if(res == null || res.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }else{
-            return new ResponseEntity<>(res, HttpStatus.OK);
+            return new ResponseEntity<>(res.toJSONString(), HttpStatus.OK);
         }
     }
 }
